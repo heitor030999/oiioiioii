@@ -18,9 +18,9 @@ function spawnFood() {
 
 document.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft' && direction !== 'RIGHT') direction = 'LEFT';
-    else if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
-    else if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
-    else if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
+    if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
+    if (event.key === 'ArrowRight' && direction !== 'LEFT') direction = 'RIGHT';
+    if (event.key === 'ArrowDown' && direction !== 'UP') direction = 'DOWN';
 });
 
 function draw() {
@@ -46,6 +46,7 @@ function draw() {
     if (gameOver) {
         ctx.fillStyle = "#fff";
         ctx.font = "40px Arial";
+        ctx.textAlign = "center";
         ctx.fillText("Game Over!", canvasSize / 2, canvasSize / 2);
     }
 }
