@@ -6,9 +6,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Jogo da Cobrinha</h1>
-    <canvas id="snake" width="400" height="400"></canvas>
-    <p>Use as setas do teclado para jogar!</p>
+    <div class="container">
+        <h1>🐍 Jogo da Cobrinha</h1>
+        <canvas id="snake" width="400" height="400"></canvas>
+        <div id="game-over" class="hidden">
+            <div class="game-over-card">
+                <h2>Game Over!</h2>
+                <p id="final-score"></p>
+                <button id="restart-btn">Tentar Novamente</button>
+            </div>
+        </div>
+        <p class="instructions">Use as setas do teclado para jogar!</p>
+    </div>
     <script src="snake.js"></script>
 </body>
 </html>
