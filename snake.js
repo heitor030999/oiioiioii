@@ -24,6 +24,7 @@ function resetGame() {
         body: '#89ffc0',
         food: '#FF5722'
     };
+    // Só esconde o game over, não mostra!
     gameOverDiv.classList.add('hidden');
     draw();
     if (typeof gameLoopHandle === "number") clearTimeout(gameLoopHandle);
@@ -37,7 +38,6 @@ function spawnFood() {
             x: Math.floor(Math.random() * (canvasSize / box)) * box,
             y: Math.floor(Math.random() * (canvasSize / box)) * box
         };
-        // Evita spawn em cima da cobra
     } while (snake && snake.some(seg => seg.x === position.x && seg.y === position.y));
     return position;
 }
@@ -53,7 +53,6 @@ document.addEventListener('keydown', event => {
 restartBtn.addEventListener('click', resetGame);
 
 function drawSnake() {
-    // Cabeça (círculo destacado)
     ctx.save();
     ctx.shadowColor = "#77ffbb";
     ctx.shadowBlur = 12;
@@ -68,17 +67,15 @@ function drawSnake() {
     ctx.fillStyle = "#222";
     let eyeOffsetY = box / 4;
     let eyeOffsetX = direction === "LEFT" ? -box / 5 : direction === "RIGHT" ? box / 5 : 0;
-    // Olho esquerdo
     ctx.beginPath();
     ctx.arc(snake[0].x + box/2 - 4 + eyeOffsetX, snake[0].y + box/2 - 4 + eyeOffsetY, 2, 0, 2 * Math.PI);
     ctx.fill();
-    // Olho direito
     ctx.beginPath();
     ctx.arc(snake[0].x + box/2 + 4 + eyeOffsetX, snake[0].y + box/2 - 4 + eyeOffsetY, 2, 0, 2 * Math.PI);
     ctx.fill();
     ctx.restore();
 
-    // Corpo (círculos degradê e sombra)
+    // Corpo
     for (let i = 1; i < snake.length; i++) {
         let grad = ctx.createRadialGradient(
             snake[i].x+box/2, snake[i].y+box/2, box/7,
@@ -98,7 +95,6 @@ function drawSnake() {
 }
 
 function drawFood() {
-    // Desenha a comida como um círculo vibrante com brilho
     ctx.save();
     ctx.shadowColor = "#ff9a5b";
     ctx.shadowBlur = 14;
@@ -107,7 +103,6 @@ function drawFood() {
     ctx.fillStyle = colors.food;
     ctx.fill();
     ctx.restore();
-    // Sementinha
     ctx.save();
     ctx.fillStyle = "#fff7";
     ctx.beginPath();
@@ -128,7 +123,6 @@ function drawScore() {
 }
 
 function draw() {
-    // Fundo quadriculado leve
     ctx.clearRect(0, 0, canvasSize, canvasSize);
     for (let i = 0; i < canvasSize / box; i++) {
         for (let j = 0; j < canvasSize / box; j++) {
@@ -143,35 +137,27 @@ function draw() {
 
 function update() {
     if (gameOver) return;
-
     frame++;
-    // Cores animadas do corpo e da comida
     colors.head = `hsl(${120 + frame * 2 % 60}, 85%, 60%)`;
     colors.food = `hsl(${(30 + frame * 4) % 360}, 95%, 56%)`;
 
     let head = { x: snake[0].x, y: snake[0].y };
-
     if (direction === 'LEFT') head.x -= box;
     if (direction === 'UP') head.y -= box;
     if (direction === 'RIGHT') head.x += box;
     if (direction === 'DOWN') head.y += box;
 
-    // Colisão com paredes
     if (
         head.x < 0 || head.x >= canvasSize ||
         head.y < 0 || head.y >= canvasSize
     ) {
         return endGame();
     }
-
-    // Colisão com si mesma
     for (let i = 0; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) {
             return endGame();
         }
     }
-
-    // Comer comida
     if (head.x === food.x && head.y === food.y) {
         score++;
         snake.unshift(head);
@@ -197,5 +183,4 @@ function gameLoop() {
     }
 }
 
-// Iniciar o jogo
 resetGame();
